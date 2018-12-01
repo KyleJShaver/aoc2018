@@ -11,16 +11,16 @@ def getintchanges() -> List[int]:
     return intchanges
 
 
-def part1(inlist: List[int] = None) -> int:
+def part1(data: List[int] = None) -> int:
     """ Return the sum of all elements of the input list """
-    intchanges: List[int] = getintchanges() if inlist is None else inlist
+    intchanges: List[int] = getintchanges() if data is None else data
     netchange: int = reduce(lambda a, b: a + b, intchanges)
     return netchange
 
 
-def part2(inlist: List[int] = None) -> int:
+def part2(data: List[int] = None) -> int:
     """ Return the first number to be visited twice, looping permanently to find it """
-    intchanges: List[int] = getintchanges() if inlist is None else inlist
+    intchanges: List[int] = getintchanges() if data is None else data
     runningfreq: int = 0
     freqset: Set[int] = {runningfreq}
     pos: int = 0
@@ -32,10 +32,23 @@ def part2(inlist: List[int] = None) -> int:
         pos = (pos + 1) % len(intchanges)
 
 
-def minpart1() -> int:
+def minpart1(data=list(map(int, open("input.txt", "r").read().split("\n", -1)))) -> int:
     """ Return the sum of all elements of the input list (minified version of part1) """
-    return reduce(lambda a, b: a + b, list(map(int, open("input.txt", "r").read().split("\n", -1))))
+    return reduce(lambda a, b: a + b, data)
 
+
+def minpart2(data=list(map(int, open("input.txt", "r").read().split("\n", -1))), pos=0, curr=0) -> int:
+    """
+    Return the first number to be visited twice, looping permanently to find it
+    (minified version of part2)
+    """
+    s = {0}
+    while True:
+        curr += data[pos]
+        if curr in s:
+            return curr
+        s.add(curr)
+        pos = (pos + 1) % len(data)
 
 if __name__ == '__main__':
     bothparts(part1, part2)
