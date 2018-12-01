@@ -32,17 +32,17 @@ def part2(data: List[int] = None) -> int:
         pos = (pos + 1) % len(intchanges)
 
 
-def minpart1(data=list(map(int, open("input.txt", "r").read().split("\n", -1)))) -> int:
+def minpart1(data: List[int]=list(map(int, open("input.txt", "r").read().split("\n", -1)))) -> int:
     """ Return the sum of all elements of the input list (minified version of part1) """
     return reduce(lambda a, b: a + b, data)
 
 
-def minpart2(data=list(map(int, open("input.txt", "r").read().split("\n", -1))), pos=0, curr=0) -> int:
+def minpart2(data: List[int]=list(map(int, open("input.txt", "r").read().split("\n", -1))), pos=0, curr=0) -> int:
     """
     Return the first number to be visited twice, looping permanently to find it
     (minified version of part2)
     """
-    s = {0}
+    s: Set[int] = {0}
     while True:
         curr += data[pos]
         if curr in s:
