@@ -4,7 +4,7 @@ from day01 import part1, part2
 
 class TestDay01(unittest.TestCase):
 
-    def test_part1(self):
+    def test_part1(self) -> None:
         # Provided examples
         self.assertEqual(part1([1, -2, 3, 1]), 3)
         self.assertEqual(part1([1, 1, 1]), 3)
@@ -14,7 +14,7 @@ class TestDay01(unittest.TestCase):
         # Personal Input
         self.assertEqual(part1(), 538)
 
-    def test_part2(self):
+    def test_part2(self) -> None:
         # Provided examples
         self.assertEqual(part2([1, -2, 3, 1]), 2)
         self.assertEqual(part2([1, -1]), 0)

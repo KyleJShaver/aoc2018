@@ -1,4 +1,4 @@
-from common import getinput, bothparts
+from common import getinput, bothparts, noop
 from typing import List, Set
 from functools import reduce
 
@@ -39,3 +39,4 @@ def minpart1() -> int:
 
 if __name__ == '__main__':
     bothparts(part1, part2)
+    noop()
