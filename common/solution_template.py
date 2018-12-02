@@ -19,6 +19,6 @@ def part2():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     bothparts(part1, part2)
     noop()

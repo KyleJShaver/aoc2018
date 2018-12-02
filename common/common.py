@@ -7,7 +7,7 @@ def getinput(filename: str = "input.txt", directory: str = "") -> str:
         return data.read()
 
 
-def bothparts(part1: Callable, part2: Callable) -> None:
+def bothparts(part1: Callable, part2: Callable) -> None:  # pragma: no cover
     """ Calls the provided functions with no arguments """
     print(f"Part 1: {part1()}")
     print(f"Part 2: {part2()}")
