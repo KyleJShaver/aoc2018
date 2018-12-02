@@ -48,9 +48,7 @@ def part2(data: str = None) -> str:
     """ Return the shared letters between two in which there is only one discrepancy """
     idlist: List[IDProfiler] = getidlist(data)
     for i in range(len(idlist)):
-        for j in range(len(idlist)):
-            if j is i:
-                continue
+        for j in range(i + 1, len(idlist)):
             shared: str = idlist[i].sharedletters(idlist[j])
             if len(shared) is len(idlist[i].rawstr) - 1:
                 return shared
