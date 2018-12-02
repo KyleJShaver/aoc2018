@@ -76,7 +76,6 @@ def minpart2(d: str = open("input.txt", "r").read(), s: Set[str] = None, a: int 
         return ""
     seen.add(f"{a}-{b}-{p}")
     if lines[a][:p] + lines[a][p + 1:] == lines[b][:p] + lines[b][p + 1:] and seen.add("found") is None:
-        print(lines[a][:p] + lines[a][p + 1:])
         return lines[a][:p] + lines[a][p + 1:]
     return max(minpart2(d, seen, a, b + 1, p), minpart2(d, seen, a + 1, b + 1, p), minpart2(d, seen, a, b, p + 1))
 
