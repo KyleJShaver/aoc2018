@@ -1,5 +1,6 @@
 from common import getinput, bothparts, noop
-from typing import List, Dict
+from typing import List, Dict, Set
+import re
 
 
 class IDProfiler:
@@ -52,6 +53,31 @@ def part2(data: str = None) -> str:
             shared: str = idlist[i].sharedletters(idlist[j])
             if len(shared) is len(idlist[i].rawstr) - 1:
                 return shared
+
+
+def minpart1(data: str = open("input.txt", "r").read()) -> int:
+    """ Return the checksum (minified version of part1) """
+    lines: List[str] = data.split("\n")
+    sets: List[Set[str]] = list(map(lambda a: set(), range(len(lines[0]) + 1)))
+    for i in range(ord("a"), ord("z") + 1):
+        for line in lines:
+            sets[len(re.findall(f"{chr(i)}", line))].add(line)
+    return len(sets[2]) * len(sets[3])
+
+
+def minpart2(d: str = open("input.txt", "r").read(), s: Set[str] = None, a: int = 0, b: int = 1, p: int = 0) -> str:
+    """
+    Return the shared letters between two in which there is only one discrepancy
+    (minified version of part2) (long runtime)
+    """
+    seen: Set[str] = s if s is not None else set()
+    lines: List[str] = d.split("\n")
+    if p >= len(lines[a]) or b >= len(lines) or f"{a}-{b}-{p}" in seen:
+        return ""
+    seen.add(f"{a}-{b}-{p}")
+    if lines[a][:p] + lines[a][p + 1:] == lines[b][:p] + lines[b][p + 1:]:
+        return lines[a][:p] + lines[a][p + 1:]
+    return max(minpart2(d, seen, a, b + 1, p), minpart2(d, seen, a + 1, b + 1, p), minpart2(d, seen, a, b, p + 1))
 
 
 if __name__ == '__main__':
