@@ -1,4 +1,4 @@
-from common import getinput, bothparts
+from common import getinput, bothparts, noop
 
 
 def getval(data: str = None) -> str:
@@ -17,3 +17,4 @@ def part2():
 
 if __name__ == '__main__':
     bothparts(part1, part2)
+    noop()

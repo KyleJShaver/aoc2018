@@ -1,4 +1,4 @@
-from common import getinput, bothparts
+from common import getinput, bothparts, noop
 from typing import List, Dict
 
 
@@ -58,3 +58,4 @@ def part2(data: str = None) -> str:
 
 if __name__ == '__main__':
     bothparts(part1, part2)
+    noop()
