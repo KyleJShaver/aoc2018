@@ -3,7 +3,7 @@ from typing import Set, List, Dict, Tuple
 
 
 class IDProfiler:
-    __slots__ = ["hastwo", "hasthree", "rawstr", "lettercounts"]
+    __slots__ = ["hastwo", "hasthree", "rawstr"]
 
     def __init__(self, rawstr: str = "") -> None:
         self.rawstr: str = rawstr
@@ -14,18 +14,11 @@ class IDProfiler:
             if letter not in counts:
                 counts[letter] = 0
             counts[letter] += 1
-        self.lettercounts: Dict[str, int] = counts
         for key, val in counts.items():
             if val == 2:
                 self.hastwo = True
             elif val == 3:
                 self.hasthree = True
-
-    def __str__(self):
-        return self.rawstr
-
-    def __repr__(self):
-        return self.rawstr
 
     def sharedletters(self, idprofiler: "IDProfiler") -> str:
         """ Return the shared in-order letters between self and idprofiler """
