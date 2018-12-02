@@ -1,5 +1,5 @@
 from common import getinput, bothparts
-from typing import Set, List, Dict, Tuple
+from typing import List, Dict
 
 
 class IDProfiler:
