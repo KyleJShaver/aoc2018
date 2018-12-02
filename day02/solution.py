@@ -1,6 +1,10 @@
 from common import getinput, bothparts, noop
 from typing import List, Dict, Set
 import re
+from pathlib import Path
+from os import sep
+
+DIR = str(Path(__file__).parent) + sep
 
 
 class IDProfiler:
@@ -32,7 +36,7 @@ class IDProfiler:
 
 def getidlist(data: str = None) -> List[IDProfiler]:
     """ Return a list of IDProfilers from provided data or input.txt """
-    boxids: str = getinput() if data is None else data
+    boxids: str = getinput(directory=DIR) if data is None else data
     idlist: List[IDProfiler] = list(map(IDProfiler, boxids.split("\n")))
     return idlist
 
@@ -55,7 +59,7 @@ def part2(data: str = None) -> str:
                 return shared
 
 
-def minpart1(data: str = open("input.txt", "r").read()) -> int:
+def minpart1(data: str = open(DIR+"input.txt", "r").read()) -> int:
     """ Return the checksum (minified version of part1) """
     lines: List[str] = data.split("\n")
     sets: List[Set[str]] = list(map(lambda a: set(), range(len(lines[0]) + 1)))
@@ -65,7 +69,7 @@ def minpart1(data: str = open("input.txt", "r").read()) -> int:
     return len(sets[2]) * len(sets[3])
 
 
-def minpart2(d: str = open("input.txt", "r").read(), s: Set[str] = None, a: int = 0, b: int = 1, p: int = 0) -> str:
+def minpart2(d: str = open(DIR+"input.txt", "r").read(), s: Set[str] = None, a: int = 0, b: int = 1, p: int = 0) -> str:
     """
     Return the shared letters between two in which there is only one discrepancy
     (minified version of part2) (longer runtime)

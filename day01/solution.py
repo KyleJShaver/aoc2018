@@ -1,11 +1,15 @@
 from common import getinput, bothparts, noop
 from typing import List, Set
 from functools import reduce
+from pathlib import Path
+from os import sep
+
+DIR = str(Path(__file__).parent) + sep
 
 
 def getintchanges() -> List[int]:
     """ Return a list of integers from the input """
-    data: str = getinput()
+    data: str = getinput(directory=DIR)
     strchanges: List[str] = data.split("\n")
     intchanges: List[int] = list(map(int, strchanges))
     return intchanges
@@ -32,12 +36,12 @@ def part2(data: List[int] = None) -> int:
         pos = (pos + 1) % len(intchanges)
 
 
-def minpart1(data: List[int]=list(map(int, open("input.txt", "r").read().split("\n")))) -> int:
+def minpart1(data: List[int]=list(map(int, open(DIR+"input.txt", "r").read().split("\n")))) -> int:
     """ Return the sum of all elements of the input list (minified version of part1) """
     return reduce(lambda a, b: a + b, data)
 
 
-def minpart2(data: List[int]=list(map(int, open("input.txt", "r").read().split("\n"))), pos=0, curr=0) -> int:
+def minpart2(data: List[int]=list(map(int, open(DIR+"input.txt", "r").read().split("\n"))), pos=0, curr=0) -> int:
     """
     Return the first number to be visited twice, looping permanently to find it
     (minified version of part2)

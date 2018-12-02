@@ -1,9 +1,13 @@
 from common import getinput, bothparts, noop
+from pathlib import Path
+from os import sep
+
+DIR = str(Path(__file__).parent) + sep
 
 
 def getval(data: str = None) -> str:
     """ Return a str from provided data or input.txt """
-    val: str = getinput() if data is None else data
+    val: str = getinput(directory=DIR) if data is None else data
     return val
 
 

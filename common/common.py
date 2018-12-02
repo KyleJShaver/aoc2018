@@ -1,9 +1,9 @@
 from typing import Callable
 
 
-def getinput(filename: str = "input.txt") -> str:
+def getinput(filename: str = "input.txt", directory: str = "") -> str:
     """ Return the contents of the input file as a str """
-    with open(filename, "r") as data:
+    with open(directory + filename, "r") as data:
         return data.read()
 
 
