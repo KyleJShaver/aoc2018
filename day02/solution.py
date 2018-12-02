@@ -84,6 +84,6 @@ def minpart2(d: str = open(DIR+"input.txt", "r").read(), s: Set[str] = None, a: 
     return max(minpart2(d, seen, a, b + 1, p), minpart2(d, seen, a + 1, b + 1, p), minpart2(d, seen, a, b, p + 1))
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     bothparts(part1, part2)
     noop()

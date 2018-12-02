@@ -54,6 +54,7 @@ def minpart2(data: List[int]=list(map(int, open(DIR+"input.txt", "r").read().spl
         s.add(curr)
         pos = (pos + 1) % len(data)
 
-if __name__ == '__main__':
+
+if __name__ == '__main__':  # pragma: no cover
     bothparts(part1, part2)
     noop()
