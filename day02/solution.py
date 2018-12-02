@@ -68,14 +68,15 @@ def minpart1(data: str = open("input.txt", "r").read()) -> int:
 def minpart2(d: str = open("input.txt", "r").read(), s: Set[str] = None, a: int = 0, b: int = 1, p: int = 0) -> str:
     """
     Return the shared letters between two in which there is only one discrepancy
-    (minified version of part2) (long runtime)
+    (minified version of part2) (longer runtime)
     """
     seen: Set[str] = s if s is not None else set()
     lines: List[str] = d.split("\n")
-    if p >= len(lines[a]) or b >= len(lines) or f"{a}-{b}-{p}" in seen:
+    if p >= len(lines[a]) or b >= len(lines) or f"{a}-{b}-{p}" in seen or "found" in seen:
         return ""
     seen.add(f"{a}-{b}-{p}")
-    if lines[a][:p] + lines[a][p + 1:] == lines[b][:p] + lines[b][p + 1:]:
+    if lines[a][:p] + lines[a][p + 1:] == lines[b][:p] + lines[b][p + 1:] and seen.add("found") is None:
+        print(lines[a][:p] + lines[a][p + 1:])
         return lines[a][:p] + lines[a][p + 1:]
     return max(minpart2(d, seen, a, b + 1, p), minpart2(d, seen, a + 1, b + 1, p), minpart2(d, seen, a, b, p + 1))
 
