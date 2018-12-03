@@ -43,8 +43,8 @@ def claimsoverlaps(data: str = None) -> Set[str]:
     overlaps: Set[str] = set()
     for rect in rects:
         recttouched: Set[str] = rect.claimedcoords()
-        overlaps = overlaps.union(claimed.intersection(recttouched))
-        claimed = claimed.union(recttouched)
+        overlaps.update(claimed.intersection(recttouched))
+        claimed.update(recttouched)
     return overlaps
 
 
