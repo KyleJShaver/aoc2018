@@ -5,7 +5,7 @@ def test_part1() -> None:
     funcs = [part1, minpart1]
     for func in funcs:
         # Provided example
-        assert func("abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab") ==  12
+        assert func("abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab") == 12
 
         # Personal Input
         assert func() == 6175
