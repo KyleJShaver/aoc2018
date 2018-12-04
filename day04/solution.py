@@ -112,6 +112,6 @@ def part2(data: str = None):
     return guard.id * guard.asleepmincounts().index(guard.mostasleepmin)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     bothparts(part1, part2)
     noop()

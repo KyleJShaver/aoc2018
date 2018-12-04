@@ -11,11 +11,11 @@ def getval(data: str = None) -> str:
     return val
 
 
-def part1():
+def part1(data: str = None):
     pass
 
 
-def part2():
+def part2(data: str = None):
     pass
 
 
