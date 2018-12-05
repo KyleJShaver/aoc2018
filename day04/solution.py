@@ -1,115 +1,79 @@
 from common import getinput, bothparts, noop
 from pathlib import Path
 from os import sep
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Tuple
+from re import match
 from functools import reduce
 
 DIR = str(Path(__file__).parent) + sep
 
 
-class Time:
-
-    def __init__(self, rawinput: str) -> None:
-        self.rawinput: str = rawinput
-        components: List[str] = rawinput.split(" ")
-        self.date: str = components.pop(0).lstrip("[")
-        datecomponents: List[str] = self.date.split("-")
-        self.year: int = int(datecomponents[0])
-        self.month: int = int(datecomponents[1])
-        self.day: int = int(datecomponents[2])
-        self.time: str = components.pop(0).rstrip("]")
-        timecomponents: List[str] = self.time.split(":")
-        self.hour: int = int(timecomponents[0])
-        self.minute: int = int(timecomponents[1])
-
-    def diffmins(self, time: "Time") -> Set[int]:
-        minutes: Set[int] = set()
-        for minute in range(self.minute, time.minute):
-            minutes.add(minute)
-        return minutes
-
-
 class Guard:
+    __slots__ = ["id", "sleepmins", "sleepstart"]
 
-    def __init__(self, rawinput: str) -> None:
-        self.shiftstart: Time = Time(rawinput)
-        components: List[str] = rawinput.split(" ")[3:]
-        self.id: int = int(components.pop(0).lstrip("#"))
-        self.asleep: bool = False
-        self.sleeptime: Time = None
-        self.asleepmins: List[Set[int]] = []
-        self.mostasleepmin: int = -1
+    def __init__(self, timeline: str) -> None:
+        rematch = match(".*#(\d+)", timeline)
+        self.id = int(rematch.group(1))
+        self.sleepmins: List[List[int]] = []
+        self.sleepstart: int = -1
 
-    def sleep(self, time: Time) -> None:
-        if self.asleep is True:
-            return self.wake(time)
-        self.asleep: bool = True
-        self.sleeptime: Time = time
+    def dosleep(self, timeline: str) -> None:
+        """ Toggle Guard's sleep action, saving list of time spent asleep when toggled to wake up """
+        minute: int = int(match(".*:(\d+)", timeline).group(1))
+        if self.sleepstart < 0:
+            self.sleepstart = minute
+        else:
+            self.sleepmins.append(list(range(self.sleepstart, minute)))
+            self.sleepstart = -1
 
-    def wake(self, time: Time) -> None:
-        self.asleep = False
-        self.asleepmins.append(self.sleeptime.diffmins(time))
-        self.sleeptime = None
+    def sleepduration(self) -> int:
+        """ Return the total number of minutes spent asleep """
+        duration: int = 0
+        for minutes in self.sleepmins:
+            duration += len(minutes)
+        return duration
 
-    def totalminsasleep(self) -> int:
-        totalasleep: int = 0
-        for asleepmins in self.asleepmins:
-            totalasleep += len(asleepmins)
-        return totalasleep
-
-    def asleepmincounts(self) -> List[int]:
-        asleepcount: List[int] = []
+    def sleepmax(self) -> Tuple[int, int]:
+        """ Return the count of the most frequent asleep minute and the most frequent asleep minute """
+        frequencies: List[int] = []
         for _ in range(0, 60):
-            asleepcount.append(0)
-        for sleepmins in self.asleepmins:
-            for sleepmin in sleepmins:
-                asleepcount[sleepmin] += 1
-        self.mostasleepmin = reduce(lambda a, b: a if a > b else b, asleepcount)
-        return asleepcount
-
-
-def isguard(line: str) -> bool:
-    if "#" in line:
-        return True
-    return False
+            frequencies.append(0)
+        for sleepmins in self.sleepmins:
+            for minute in sleepmins:
+                frequencies[minute] += 1
+        freqcount: int = max(frequencies)
+        return freqcount, frequencies.index(freqcount)
 
 
 def getguards(data: str = None) -> List[Guard]:
-    """ Return a str from provided data or input.txt """
+    """ Return a list of Guards from provided data or input.txt """
     times: List[str] = (getinput(directory=DIR) if data is None else data).split("\n")
     times.sort()
-    guardlookup: Dict[int, Guard] = {}
-    guards: List[Guard] = []
+    guards: Dict[int, Guard] = dict()
     lastguard: Guard = None
-
     for timeline in times:
-        if isguard(timeline):
-            guard: Guard = Guard(timeline)
-            if guard.id in guardlookup:
-                guard = guardlookup[guard.id]
-            else:
-                guardlookup[guard.id] = guard
-                guards.append(guard)
-            lastguard = guard
+        if "#" in timeline:
+            guard = Guard(timeline)
+            if guard.id not in guards:
+                guards[guard.id] = guard
+            lastguard = guards[guard.id]
         else:
-            lastguard.sleep(Time(timeline))
-    return guards
+            lastguard.dosleep(timeline)
+    return guards.values()
 
 
-def part1(data: str = None):
+def part1(data: str = None) -> int:
+    """ Return the Guard with the longest sleep time's id times the most frequent minute they are asleep """
     guards: List[Guard] = getguards(data)
-    guard: Guard = reduce(lambda a, b: a if a.totalminsasleep() > b.totalminsasleep() else b, guards)
-    asleepcount: List[int] = guard.asleepmincounts()
-    mostfreqmin = reduce(lambda a, b: a if a > b else b, asleepcount)
-    return guard.id * asleepcount.index(mostfreqmin)
+    longestsleeper = reduce(lambda a, b: a if a.sleepduration() > b.sleepduration() else b, guards)
+    return longestsleeper.id * longestsleeper.sleepmax()[1]
 
 
-def part2(data: str = None):
+def part2(data: str = None) -> int:
+    """ Return the Guard with the most consistent sleep minute's id times the most frequent minute they are asleep """
     guards: List[Guard] = getguards(data)
-    for guard in guards:
-        guard.asleepmincounts()
-    guard = reduce(lambda a, b: a if a.mostasleepmin > b.mostasleepmin else b, guards)
-    return guard.id * guard.asleepmincounts().index(guard.mostasleepmin)
+    consistentsleeper: Guard = reduce(lambda a, b: a if a.sleepmax()[0] > b.sleepmax()[0] else b, guards)
+    return consistentsleeper.id * consistentsleeper.sleepmax()[1]
 
 
 if __name__ == '__main__':  # pragma: no cover
