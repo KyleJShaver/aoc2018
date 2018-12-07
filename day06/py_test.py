@@ -15,7 +15,7 @@ def test_part2() -> None:
     funcs = [part2]
     for func in funcs:
         # Provided example
-        assert func("1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9") is None
+        assert func("1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", maxdist=32) == 16
 
         # Personal Input
-        assert func() is None
+        assert func() == 35928

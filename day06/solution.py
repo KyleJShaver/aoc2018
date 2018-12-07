@@ -18,10 +18,11 @@ class Point:
         self.id: str = str(uuid.uuid4())
 
     def manhattan(self, p: "Point") -> int:
+        """ Return the manhattan distance from this point to any other """
         return abs(self.x - p.x) + abs(self.y - p.y)
 
 
-def getpoints(data: str = None) -> List[List[int]]:
+def getpoints(data: str = None) -> List[Point]:
     """ Return a list of Points from provided data or input.txt """
     pointsdata: List[str] = (getinput(directory=DIR) if data is None else data).split("\n")
     pointslist: List[Point] = []
@@ -31,14 +32,11 @@ def getpoints(data: str = None) -> List[List[int]]:
 
 
 def sortpoints(points: List[Point], sortx: bool = True) -> List[Point]:
-    """
-    Return the points list sorted by x if sortx is True or y if sortx is False.
-    This function also mutates the original list, returning it as a convenience
-    """
+    """ Return the points list sorted by x if sortx is True or y if sortx is False """
     return sorted(points, key=attrgetter("x" if sortx is True else "y"))
 
 
-def spacemap(points: List[Point]) -> List[List[str]]:
+def spacemap(points: List[Point], extrapad: bool = False) -> List[List[str]]:
     """ Return a 2D list where the indices are the coordinate and the value is the id of the closest point """
     maxx: int = points[len(points) - 1].x
     minx: int = points[0].x
@@ -46,9 +44,10 @@ def spacemap(points: List[Point]) -> List[List[str]]:
     maxy: int = points[len(points) - 1].y
     miny: int = points[0].y
     space: List[List[str]] = []
-    for x in range(minx - 1, maxx + 1):
+    padding: int = 1 if extrapad is False else 100
+    for x in range(minx - padding, maxx + padding):
         row: List[str] = []
-        for y in range(miny - 1, maxy + 1):
+        for y in range(miny - padding, maxy + padding):
             currpoint: Point = Point(f'{x}, {y}')
             closestdist: int = maxx + maxy
             closestnode: Point = None
@@ -96,18 +95,18 @@ def part1(data: str = None) -> int:
     return max(count.values())
 
 
-def part2(data: str = None):
-    # TODO: Finish implementing Day 6 Pt 2
+def part2(data: str = None, maxdist: int = 10000):
+    """ Return number of points with max distance from all points < maxdist """
     points: List[Point] = sortpoints(getpoints(data))
-    space: List[List[str]] = spacemap(points)
+    space: List[List[str]] = spacemap(points, extrapad=True)
     safe: int = 0
     for x in range(0, len(space)):
         for y in range(0, len(space[0])):
             point = space[x][y]
-            if len(point) > 36 and int(point[36:]) < 10000:
+            totaldist = int(point) if len(point) < 36 else int(point[36:])
+            if totaldist < maxdist:
                 safe += 1
-
-    return None
+    return safe
 
 
 if __name__ == '__main__':  # pragma: no cover
