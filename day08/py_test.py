@@ -1,4 +1,12 @@
-from day08 import part1, part2
+from day08 import part1, part2, Node
+
+
+def testimpossibleadds() -> None:
+    childnode: Node = Node(0, 3)
+    addnode: Node = Node(1, 1)
+    assert childnode.addchild(addnode) is False
+    metanode: Node = Node(3, 0)
+    assert metanode.addmetadata(1) is False
 
 
 def test_part1() -> None:
